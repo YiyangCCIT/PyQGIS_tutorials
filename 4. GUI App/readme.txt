@@ -5,3 +5,5 @@ C:\Program Files\QGIS 3.10\apps\Qt5\bin\designer.exe
 main.ui
 
 3. Compile ui to py
+
+4. Edit main.py and Test

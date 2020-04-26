@@ -7,6 +7,27 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from qgis.PyQt.QtGui import (
+    QColor,
+)
+
+from qgis.PyQt.QtCore import Qt, QRectF
+
+from qgis.core import (
+    QgsVectorLayer,
+    QgsPoint,
+    QgsPointXY,
+    QgsProject,
+    QgsGeometry,
+    QgsMapRendererJob,
+)
+
+from qgis.gui import (
+    QgsMapCanvas,
+    QgsVertexMarker,
+    QgsMapCanvasItem,
+    QgsRubberBand,
+)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -31,6 +52,25 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+        self.btnLoadShp.clicked.connect(self.loadShp)
+
+    def loadShp(self):
+        canvas = self.myMap
+        canvas.setCanvasColor(Qt.white)
+        canvas.enableAntiAliasing(True)
+        vlayer = QgsVectorLayer("C:/map/shps/scenic_spot_C_f/Scenic_spot_C_f.shp", "POI layer", "ogr")
+        if not vlayer.isValid():
+            print("Layer failed to load!")
+
+        # add layer to the registry
+        QgsProject.instance().addMapLayer(vlayer)
+
+        # set extent to the extent of our layer
+        canvas.setExtent(vlayer.extent())
+
+        # set the map canvas layer set
+        canvas.setLayers([vlayer])
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
